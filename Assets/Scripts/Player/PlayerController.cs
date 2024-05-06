@@ -1,18 +1,119 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     State state;
+    WalkState walkState;
+    AirState airState;
+    IdleState idleState;
 
-    void Update() {
-        CheckInput();
+    public Rigidbody2D body;
+    public BoxCollider2D groundCheck;
+    public LayerMask groundMask;
+    public Animator animator;
+
+    public float acceleration;
+    public float maxSpeed;
+    public float groundSpeed;
+    public float jumpSpeed;
+    public float groundDecay;
+    public bool grounded { get; protected set; }
+    public float xInput { get; protected set; }
+    public float yInput { get; protected set; }
+
+    private void Start()
+    {
+        //idleState.Setup(body, animator, this);
+        //walkState.Setup(body, animator, this);
+        //airState.Setup(body, animator, this);
+        state = idleState;
     }
 
-    void CheckInput(){
+    void Update() 
+    {
+        CheckInput();
+        HandleJumpInput();
+
+        //if (state.isComplete)
+        //{
+            //SelectState();
+        //}
+
+        //state.Do();
+    }
+
+    void FixedUpdate()  // Handle Physics
+    {
+        CheckGround();
+        ApplyFriction();
+        HandleXMovement();
+    }
+    
+    void SelectState()
+    {
+        if (grounded)
+        {
+            if(xInput == 0)  // moving horizontally
+            {
+                state = idleState;
+            }
+            else
+            {
+                state = walkState;
+            }
+        }
+        else  // not grounded 
+        {
+            state = airState;
+        }
+    }
+
+    void CheckInput()
+    {
         xInput = Input.GetAxis("Horizontal");
-        yInput = Input.GetAxis("Verticle");
+        yInput = Input.GetAxis("Vertical");
+    }
+
+    void HandleXMovement()
+    {
+        if (Mathf.Abs(xInput) > 0)
+        {
+            float increment = xInput * acceleration;
+            float newSpeed = Mathf.Clamp(body.velocity.x + increment, -maxSpeed, maxSpeed);  // Limiter clamp
+            body.velocity = new Vector2(newSpeed, body.velocity.y);
+
+            //FaceDirection();
+        }
+    }
+
+    void HandleJumpInput()
+    {
+        if(Input.GetButtonDown("Jump") && grounded)
+        {
+            body.velocity = new Vector2(body.velocity.x, jumpSpeed);
+        }
+    }
+
+    void FaceDirection()
+    {
+        float direction = Mathf.Sign(xInput);
+        transform.localScale = new Vector3(direction, 1, 1);
+    }
+
+    void CheckGround()
+    {
+        grounded = Physics2D.OverlapAreaAll(groundCheck.bounds.min, groundCheck.bounds.max, groundMask).Length > 0;
+    }
+
+    void ApplyFriction()
+    {
+        if (grounded && xInput == 0 && body.velocity.y <= 0)
+        {
+            body.velocity *= groundDecay;
+        }
     }
 }
 

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class WalkState : State
 {
-    // Start is called before the first frame update
-    void Start()
+    public AnimationClip anim;
+    public override void Enter()
     {
-        
+        //animator.Play("Walk");
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Do()
     {
-        
+        // aniamtor speed cycle check
+        if(!player.grounded || Mathf.Abs(body.velocity.x) < 0.1f )
+        {
+            isComplete = true; 
+        }
     }
 }

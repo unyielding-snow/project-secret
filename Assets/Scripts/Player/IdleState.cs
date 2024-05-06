@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Idle : State
+public class IdleState : State
 {
     public override void Enter() {
         // animator.Play("Idle");
