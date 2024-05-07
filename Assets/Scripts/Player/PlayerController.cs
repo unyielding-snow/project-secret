@@ -81,9 +81,10 @@ public class PlayerController : MonoBehaviour
     {
         if (Mathf.Abs(xInput) > 0)
         {
-            float increment = xInput * acceleration;
-            float newSpeed = Mathf.Clamp(body.velocity.x + increment, -maxSpeed, maxSpeed);  // Limiter clamp
-            body.velocity = new Vector2(newSpeed, body.velocity.y);
+            // Get rid of acceleration to improve preciseness
+            //float increment = xInput * acceleration;
+            //float newSpeed = Mathf.Clamp(body.velocity.x + increment, -maxSpeed, maxSpeed);  // Limiter clamp
+            body.velocity = new Vector2(xInput * maxSpeed, body.velocity.y);
 
             //FaceDirection();
         }
