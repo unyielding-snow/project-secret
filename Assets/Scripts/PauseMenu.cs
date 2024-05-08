@@ -6,13 +6,14 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
 
-    [SerializeField] private GameObject pausePanel;
-    [SerializeField] Slider brightnessSlider;
+    [SerializeField] public GameObject pausePanel;
     Image brightnessOverlay;
-
     private bool paused;
 
-    void Start()
+    //[SerializeField] public Slider brightnessSlider;
+
+
+    void Awake()
     {
         pausePanel.SetActive(false);
         paused = false;
@@ -22,9 +23,11 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel"))
         {
+            Debug.Log("Escape Key Pressed");
             if(paused)
             {
                 Resume();
+                Debug.Log("Resume");
             }
             else
             {
@@ -35,22 +38,18 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        // We probably don't want to use timescale = 0, will bite us in the ass 
+        // We probably don't want to keep using timescale = 0, will bite us in the ass 
         // Use flags to freeze everything in the game, disable player input, and snapshot data
         pausePanel.SetActive(true);
-        
+        Time.timeScale = 0f;
         paused = true;
-
-        // Tint screen darkness 
-
-
 
     }
 
     public void Resume()
     {
         pausePanel.SetActive(false);
-
+        Time.timeScale = 1f;
         paused = false;
     }
 
