@@ -24,6 +24,8 @@ public abstract class HealthSystem : MonoBehaviour
     public bool isInvincible = false;
     bool isDead = false;
 
+    protected int currentHealth = -1;
+
     void Awake()
     {
         events.OnDamage.AddListener(events.OnHealthChange.Invoke);
@@ -49,6 +51,25 @@ public abstract class HealthSystem : MonoBehaviour
 
     protected abstract bool ApplyHeal(int amount);
 
+    public bool Damage(int amount, object obj = null)
+    {
+        if (isInvincible)
+        {
+            return false;
+        }
+
+        bool damaged = ApplyDamage(amount);
+
+        if (damaged)
+        {
+            events.OnDamage.Invoke();
+        }
+
+        return damaged;
+    }
+
+    protected abstract bool ApplyDamage(int amount);
+
     protected void Die()
     {
         if (isDead)
@@ -64,6 +85,5 @@ public abstract class HealthSystem : MonoBehaviour
     {
         return isDead;
     }
-
-    
+   
 }
