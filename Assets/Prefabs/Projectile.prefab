@@ -95,6 +95,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 3
+  SourceEnemy: 1
+  damageLayers:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!212 &3109821439998899702
 SpriteRenderer:
   m_ObjectHideFlags: 0
