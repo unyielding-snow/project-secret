@@ -5,6 +5,7 @@ using UnityEngine;
 public class ProjectileBehavior : MonoBehaviour
 {
     public float Speed = 3.0f;
+    public int damageValue = 30;
     public bool sourceEnemy = true;
 
     // Only damage stuff on this layer 
@@ -31,15 +32,18 @@ public class ProjectileBehavior : MonoBehaviour
 
     private void DoDamage(GameObject target)
     {
-        //Check if collision is included in layermask
-        if ((damageLayers.value & 1 << target.layer) != 0)
+        // Check if collision is included in layermask
+        if ((damageLayers.value & (1 << target.layer)) != 0)
         {
-            //Find health component on collided object
+            // Find health component on collided object
             HealthSystem health = target.GetComponent<HealthSystem>();
             if (health)
             {
-                health.Damage(10, target);
-                Debug.Log("Damage Applied");
+                if (health.Damage(damageValue, target))
+                {
+                    Debug.Log("Damage Applied:" + damageValue);
+                }
+
             }
         }
     }
