@@ -46,7 +46,12 @@ public class CharacterHealth : HealthSystem
             Debug.Log("Use Health Change to Revive A Player");
         }
 
+        currentHealth += amount; 
 
+        if(currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
 
         return true;
     }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    // Justin: Scrapped code, used a library instead.
+
     // Follow the player 
     private Vector3 offset = new Vector3(0f, 0f, -10f);
     public float smoothTime = 0.35f;
@@ -21,7 +23,7 @@ public class CameraFollow : MonoBehaviour
     {
         Vector3 targetPosition = target.position + offset;  // Trailing effect
 
-        if(targetPosition.y > maxYPosition)
+        if(targetPosition.y > maxYPosition)  // Camera Bounds
         {
 
         }
