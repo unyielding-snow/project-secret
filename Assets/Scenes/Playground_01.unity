@@ -482,7 +482,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a07f945f73d955f4f935320c373a88b5, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -553,7 +553,6 @@ MonoBehaviour:
         m_Calls: []
   isInvincible: 0
   maxHealth: 100
-  currentHealth: 100
   iframesEnabled: 0
 --- !u!1 &607783504
 GameObject:
