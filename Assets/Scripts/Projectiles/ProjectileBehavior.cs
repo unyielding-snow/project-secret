@@ -23,6 +23,11 @@ public class ProjectileBehavior : MonoBehaviour
          *  in the future check based on a specific tag?
          *  (players, walls/border hitboxes, enemies)
          */
+        if (collision == null)
+        {
+            Debug.LogError("Null Collision");
+            return;
+        }
         if (sourceEnemy && collision.gameObject.name == "Player")
         {
             DoDamage(collision.gameObject);
@@ -32,6 +37,11 @@ public class ProjectileBehavior : MonoBehaviour
 
     private void DoDamage(GameObject target)
     {
+        if (target == null)
+        {
+            Debug.LogError("Null Target");
+            return;
+        }
         // Check if collision is included in layermask
         if ((damageLayers.value & (1 << target.layer)) != 0)
         {

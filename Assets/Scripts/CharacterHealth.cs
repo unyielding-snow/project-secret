@@ -43,8 +43,8 @@ public class CharacterHealth : HealthSystem
     {
         if (IsDead())
         {
-            Debug.Log("Error: Healed when dead");
-            Debug.Log("Use Health Change to Revive A Player");
+            Debug.LogError("Error: Healed when dead");
+            Debug.LogError("Use Health Change to Revive A Player");
         }
 
         currentHealth += amount; 

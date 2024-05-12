@@ -18,6 +18,11 @@ public class InventorySystem
 
     public void Add(ItemData reference)
     {
+        if (reference == null)
+        {
+            Debug.LogError("Attempt to add a null reference");
+            return;
+        }
         if (itemDicionary.TryGetValue(reference, out InventoryItem value))
         {
             value.AddToStack();
@@ -32,6 +37,11 @@ public class InventorySystem
 
     public void Remove(ItemData reference)
     {
+        if (reference == null)
+        {
+            Debug.LogError("Attempt to remove a null reference");
+            return;
+        }
         if (itemDicionary.TryGetValue(reference, out InventoryItem value))
         {
             value.RemoveFromStack();
@@ -46,6 +56,11 @@ public class InventorySystem
 
     public InventoryItem Get(ItemData reference)
     {
+        if (reference == null)
+        {
+            Debug.LogError("Attempt to get a null reference");
+            return;
+        }
         if (itemDicionary.TryGetValue(reference, out InventoryItem value))
         {
             return value;

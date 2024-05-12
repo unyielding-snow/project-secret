@@ -12,6 +12,11 @@ public class InventoryItem
     
     public InventoryItem(ItemData val)
     {
+        if (val == null)
+        {
+            Debug.LogError("Attempt to create a null InventoryItem.", val);
+            return;
+        }
         data = val;
         AddToStack();
     }
