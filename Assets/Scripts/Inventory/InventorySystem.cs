@@ -1,14 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Inventory Manager System
+[Serializable]
 public class InventorySystem
 {
     private Dictionary<ItemData, InventoryItem> itemDictionary;
     public List<InventoryItem> inventory { get; private set; }
 
-    private void Awake()
+    public InventorySystem()
     {
         inventory = new List<InventoryItem>();
         itemDictionary = new Dictionary<ItemData, InventoryItem>();
