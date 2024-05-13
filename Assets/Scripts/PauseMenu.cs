@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-
+    public UnityEvent pauseEvent = new UnityEvent();
     [SerializeField] private GameObject pausePanel;
     Image brightnessOverlay;
     private bool paused;
@@ -26,11 +27,12 @@ public class PauseMenu : MonoBehaviour
             if(paused)
             {
                 Resume();
-                Debug.Log("Resume");
+                pausePanel.SetActive(false);
             }
             else
             {
                 Pause();
+                pausePanel.SetActive(true);
             }
         }
     }
@@ -38,8 +40,7 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         // We probably don't want to keep using timescale = 0, will bite us in the ass 
-        // Use flags to freeze everything in the game, disable player input, and snapshot data
-        pausePanel.SetActive(true);
+        // Use unity events to freeze everything in the game, disable player input, and snapshot data?
         Time.timeScale = 0f;
         paused = true;
 
@@ -47,7 +48,6 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        pausePanel.SetActive(false);
         Time.timeScale = 1f;
         paused = false;
     }
