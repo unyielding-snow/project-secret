@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad8b432da923c84faf5d45661a44abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: DefaultName
+  CharacterName: Dugu
   Epithet: Not Batman
   relationshipMeter: 0
 --- !u!114 &52269624
@@ -331,9 +331,16 @@ MonoBehaviour:
   pause:
     m_PersistentCalls:
       m_Calls: []
-  DialogueUI: {fileID: 2025910283}
+  resume:
+    m_PersistentCalls:
+      m_Calls: []
   activateOnPlayerEnter: 0
+  VisualDialogueUI: {fileID: 0}
   dialogueRange: {fileID: 0}
+  mainPortraitImage: {fileID: 282671938}
+  charNameDisplay: {fileID: 755738421}
+  charEpithetDisplay: {fileID: 164768403}
+  displayedConvoText: {fileID: 1015533683}
   inRange: 0
   inConversation: 0
   inCombat: 0
@@ -408,7 +415,7 @@ GameObject:
   - component: {fileID: 164768403}
   m_Layer: 5
   m_Name: Epithet
-  m_TagString: Untagged
+  m_TagString: DialogueUIEpithet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -421,16 +428,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 164768401}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -34.909145}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1375330721}
-  m_RootOrder: 2
+  m_Father: {fileID: 1942028764}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -246.64215, y: -171.2799}
+  m_AnchoredPosition: {x: 0, y: -28.279907}
   m_SizeDelta: {x: 200, y: 44.5683}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164768403
@@ -685,7 +692,7 @@ GameObject:
   - component: {fileID: 282671938}
   m_Layer: 5
   m_Name: Portrait
-  m_TagString: Untagged
+  m_TagString: DialogueUIMainPortrait
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -703,7 +710,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1375330721}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1379,7 +1386,7 @@ GameObject:
   - component: {fileID: 755738421}
   m_Layer: 5
   m_Name: Name
-  m_TagString: Untagged
+  m_TagString: DialogueUIName
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1392,16 +1399,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755738419}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -34.909145}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1375330721}
-  m_RootOrder: 1
+  m_Father: {fileID: 1942028764}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -246.63876, y: -133.81052}
+  m_AnchoredPosition: {x: 0.0034179688, y: 9.189484}
   m_SizeDelta: {x: 273.3737, y: 52.37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &755738421
@@ -1902,8 +1909,8 @@ GameObject:
   - component: {fileID: 1015533684}
   - component: {fileID: 1015533683}
   m_Layer: 5
-  m_Name: Dialogue
-  m_TagString: Untagged
+  m_Name: MainText
+  m_TagString: DialogueUIText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2300,8 +2307,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1942028764}
-  - {fileID: 755738420}
-  - {fileID: 164768402}
   - {fileID: 282671937}
   m_Father: {fileID: 1804450417}
   m_RootOrder: 1
@@ -2930,7 +2935,7 @@ GameObject:
   - component: {fileID: 1942028766}
   - component: {fileID: 1942028765}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2947,7 +2952,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -34.909145}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 755738420}
+  - {fileID: 164768402}
   m_Father: {fileID: 1375330721}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3131,7 +3138,7 @@ GameObject:
   - component: {fileID: 2025910284}
   m_Layer: 5
   m_Name: DialogueUI
-  m_TagString: Untagged
+  m_TagString: DialogueUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

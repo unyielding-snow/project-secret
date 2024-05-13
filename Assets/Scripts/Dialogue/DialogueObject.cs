@@ -9,12 +9,14 @@ namespace Assets.Scripts.Dialogue
 {
     public class DialogueObject   // TODO: Still need to fine tune this after playtest
     {
-        public string portrait;
+        public string defaultPortrait;
         public string subtitleColor;
 
         public int priorityLevel;
 
         public List<ActivateRequirements> activateRequirement;
+
+        public List<InteractTextLineSets> interactTextLineSets;
 
         //TODO: maintain encapsulation by setting all varaibles to private, and use public getters & private setters
         //public string Name
@@ -27,7 +29,7 @@ namespace Assets.Scripts.Dialogue
     public class ActivateRequirements
     {
         public List<string> requiredTextLines;
-        public List<string> requiredFalseTextLines;
+        public List<string> requiredFalseTextLinesThisRun;
         public List<string> requiredEncounters;
     }
 
@@ -42,7 +44,9 @@ namespace Assets.Scripts.Dialogue
         public bool playOnce;
         public bool requireRunNotCleared;  // In safe zone or not?
         public int charactersInBackground;
+        public string secondPortrait;
 
+        public List<string> requiredFalseLines;
         public List<TextLine> textLines;
     }
 
@@ -52,7 +56,8 @@ namespace Assets.Scripts.Dialogue
         // Hades dim the third character in the bacgkround until called
         public string audioCue;
         public string expression;
-        public string secondPortrait;
+        public string portrait;
+        public string speaker;
 
         public string text;
     }
@@ -64,4 +69,3 @@ namespace Assets.Scripts.Dialogue
 // if you want to talk to NPC at a certain relationship level, 
 // Think about a first unlock
 
-B

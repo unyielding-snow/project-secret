@@ -5,9 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime;
+
 
 namespace Assets.Scripts
 {
@@ -21,12 +26,22 @@ namespace Assets.Scripts
         }
 
         public UnityEvent pause;
+        public UnityEvent resume;
 
-        [SerializeField] private GameObject DialogueUI;
-        private GameObject DialogueIndicator;
+        [Header("Behaviour")]
         public bool activateOnPlayerEnter = false;
-        [SerializeField] private BoxCollider2D dialogueRange;
 
+        [Header("Visual Dialogue UI")]
+        [SerializeField] private GameObject VisualDialogueUI;
+        [SerializeField] private BoxCollider2D dialogueRange;
+        private GameObject DialogueIndicator;
+        public Image mainPortraitImage;
+        public TMP_Text charNameDisplay;
+        public TMP_Text charEpithetDisplay;
+        public TMP_Text displayedConvoText;
+
+
+        [Header("States")]
         public bool inRange = false;
         public bool inConversation = false;
         public bool inCombat = false;
@@ -36,21 +51,38 @@ namespace Assets.Scripts
         private string jsonString;
         private string filePath;
 
+        // Conversation Data
+        private Conversation currentConvo;
+        private int currentConvoLine;
+
+
         void Awake()
         {
-            DialogueUI.SetActive(false);
+            currentConvoLine = 0;
+            CharacterName = gameObject.GetComponent<CharacterInfo>().getName();
 
+            VisualDialogueUI = GameObject.FindGameObjectWithTag("DialogueUI");
+            VisualDialogueUI.SetActive(false);
             DialogueIndicator = gameObject.transform.Find("DialogueIndicator").gameObject;
             DialogueIndicator.SetActive(false);
 
-            CharacterName = gameObject.GetComponent<CharacterInfo>().getName();
+            // Get mutable objects
+            //mainPortraitImage = GameObject.FindGameObjectWithTag("DialogueUIMainPortrait").GetComponent<Image>();
+            // TODO: Spawn connections programatically to prevent null issues
+            if (mainPortraitImage == null)
+                Debug.LogError("Image component not found!");
 
-            // Could generate dialogue box by code, or specification 
+            if(charNameDisplay == null)
+                Debug.LogError("TextMeshPro - Text component not found!");
+
+            // Currently programatically dialogue box by code, could also generate by specification
             dialogueRange = gameObject.AddComponent<BoxCollider2D>();
             dialogueRange.size = new Vector2(19f, 15f); 
             dialogueRange.isTrigger = true;
 
-            pause.AddListener(GameObject.FindGameObjectWithTag("PauseController").GetComponent<PauseMenu>().Pause);
+            // TODO: Sending a Pause event to Pause Controller when in dialogue
+            // Error: Can't find an inactive object
+            //pause.AddListener(GameObject.FindGameObjectWithTag("PauseController").GetComponent<PauseMenu>().Pause);
         }
 
         // TODO: What happens if there are mutliple charaters per scene, and OnTriggerEnter2D overlaps?
@@ -86,18 +118,22 @@ namespace Assets.Scripts
         {
             if(inRange && !inCombat && player.GetComponent<PlayerController>().grounded)
             {
+                // TODO: Fix connection. For now brute forced.
                 pause.Invoke();
+                Time.timeScale = 0f;
 
                 // CURRENT: Just test reading json file of data
                 if (inConversation)  // Continue to play from current dialogue
                 {
-                    PlayNextDialogue();
+                    // TODO: Get rid of placeholder
+                    //PlayNextDialogue(currentConvo);
+                    ExitVisualDialogue();
                 }
                 else
                 {
-                    GetNewDialogue();
-
-                    DialogueUI.SetActive(true);
+                    PlayNewVisualDialogue();
+                    inConversation = true;
+                    VisualDialogueUI.SetActive(true);
                 }
             }
             else
@@ -106,7 +142,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void GetNewDialogue()
+        private void PlayNewVisualDialogue()
         {
             // Preface: Imported NewtonSoft and implemented partial deserialization for optimizing read operations
             //          Either use JSONObject or only deserialize certain objects
@@ -118,41 +154,64 @@ namespace Assets.Scripts
             // If we keep NPC relationships seperate from main quest, then NPC's relationship level will become their quest sequencing. This is ideal for simplicity
             // Protagonist can just talk to themselves about the previous run at the begining of the respawn point, solving the mystery.
 
+            // TODO:
             int relationshipLevel = 0;   // Template variable
-            filePath = Path.Combine(Application.dataPath, "Dialogue/DialogueObjects/" + CharacterName + "_" + relationshipLevel + ".json");
-            jsonString = File.ReadAllText("filePath");
-            List<ActivateRequirements> dialogueRequirements = JsonConvert.DeserializeObject<List<ActivateRequirements>>(jsonString); 
+            string characterType = "Boss_";
+            filePath = Application.dataPath + "/Scripts/Dialogue/DialogueObjects/" + characterType + CharacterName + "_" + relationshipLevel + ".json";
+            Debug.Log(Application.dataPath);
             Debug.Log(filePath);
-            // Or we can use :  JObject jsonObject = JObject.Parse(jsonString);
+            jsonString = File.ReadAllText(filePath);
+            //ActivateRequirements dialogueRequirements = JsonConvert.DeserializeObject<ActivateRequirements>(jsonString); 
+            // Or we can use: JObject jsonObject = JObject.Parse(jsonString);
 
 
             // TODO: Find correct dialogue from activation requirements (connected to game data)
             // Activation requirement should be a struct of game data
-            bool gameDataRequirements = true;
-            if (gameDataRequirements)
+            if (!isGameStateEligble())
             {
-                // Whole branch of conversations can be used, randomy generate one
-                List<Conversation> convos = JsonConvert.DeserializeObject<List<Conversation>>(jsonString);
-                int conversationSize = convos.Count;
-
-
+                List<Conversation> conversations = JsonConvert.DeserializeObject<List<Conversation>>(jsonString);
+                int convoSize = conversations.Count;
+                int selectedConvo = Random.Range(0, convoSize);
+                Debug.Log("Conversation size: " + convoSize + ", Randomly Selected Conversation " + selectedConvo);
+                currentConvo = conversations[selectedConvo];
             }
 
-            // Change Dialogue UI to what 
-            UpdateDialogueUI();
-            DialogueUI.SetActive(true);
+            // Change Dialogue UI to JSON text
+
+            //TODO: UpdateDialogueUI(currentConvo);
+            VisualDialogueUI.SetActive(true);
         }
 
-        private void PlayNextDialogue()
+        private void PlayNextDialogue(Conversation convo)
         {
             // Get Next Line of Dialogue
-
+            currentConvoLine++;
+            if(currentConvoLine >= convo.textLines.Count)
+            {
+                ExitVisualDialogue();
+            }
             
         }
 
-        private void UpdateDialogueUI()
+        private void UpdateDialogueUI(Conversation convo)
         {
+            // TODO: Use multi-threading / synchronization mechanisms to make sure dialogue data changes at the same time?
             
+        }
+
+        private void ExitVisualDialogue()
+        {
+            currentConvoLine = 0;
+            currentConvo = null;
+
+            // TODO: publish conversation has been fullfilled and get rid of it in pool
+
+            // TODO: Fix pause menu event connection
+            resume.Invoke();
+            Time.timeScale = 1f;
+
+            inConversation = false;
+            VisualDialogueUI.SetActive(false);
         }
 
         private bool isGameStateEligble()

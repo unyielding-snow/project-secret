@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - PauseController
+  - DialogueUIEpithet
+  - DialogueUIName
+  - DialogueUIText
+  - DialogueUIMainPortrait
+  - DialogueUI
   layers:
   - Default
   - TransparentFX
