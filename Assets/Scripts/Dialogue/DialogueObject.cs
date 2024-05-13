@@ -2,47 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Group conversations by activation requirements. This way we don't have to check each individual conversation's requirements
+// Group conversations by activation requirements. 
 
 
 namespace Assets.Scripts.Dialogue
 {
-    public class DialogueObject   // TODO: Still need to fine tune this after playtest
+    public class DialogueObject   
     {
         public string defaultPortrait;
         public string subtitleColor;
 
         public int priorityLevel;
 
-        public List<ActivateRequirements> activateRequirement;
-
-        public List<InteractTextLineSets> interactTextLineSets;
-
-        //TODO: maintain encapsulation by setting all varaibles to private, and use public getters & private setters
-        //public string Name
-        //{
-        //    get { return _name; }
-        //    private set { _name = value; }
-        //}
+        // Looks weird but neccsiary for json parsing
+        public ActivateRequirements activateRequirement;
+        //public InteractTextLineSets conversations;
     }
 
     public class ActivateRequirements
     {
+        public int test;
         public List<string> requiredTextLines;
         public List<string> requiredFalseTextLinesThisRun;
         public List<string> requiredEncounters;
     }
 
-    public class InteractTextLineSets   // Contains all the possible dialogue lines in 
+    public class InteractTextLineSets   
     {
         public List<Conversation> Conversations;
-
     }
 
     public class Conversation
     {
         public bool playOnce;
-        public bool requireRunNotCleared;  // In safe zone or not?
+        public bool requireRunNotCleared;  // In vilage safe zone or not?
         public int charactersInBackground;
         public string secondPortrait;
 
@@ -52,7 +45,6 @@ namespace Assets.Scripts.Dialogue
 
     public class TextLine
     {
-        // How do we do conversations with three or more characters?
         // Hades dim the third character in the bacgkround until called
         public string audioCue;
         public string expression;

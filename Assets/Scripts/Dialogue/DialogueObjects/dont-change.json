@@ -1,14 +1,14 @@
 {
-	"defaultPortrait": "Portrait_Default_Qiubai_01",
-	"subtitleColor": "White",
-	"priority": 1,
+	DefaultPortrait: "Portrait_Default_Qiubai_01",
+	SubtitleColor: "White",
+	Priority: 1,
 	
-	"ActivateRequirements":
+	ActivateRequirements:
 	{
-		"Test": 1,
-		"RequiredTextLines": [ "TestRequiredLine", "Test", "Two" ],
-		"RequiredFalseTextLinesThisRun": [ "TestNotRequiredLine" ],
-		"RequiredEncounters": [ "TestRequiredEncounters" ]
+		Test: 1,
+		RequiredTextLines: [ "TestRequiredLine" ],
+		RequiredFalseTextLinesThisRun: [ "TestNotRequiredLine" ],
+		RequiredEncounters: [ "TestRequiredEncounters" ]
 	},
 	
 	InteractTextLineSets: {

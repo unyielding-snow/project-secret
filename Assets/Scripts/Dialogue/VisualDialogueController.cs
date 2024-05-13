@@ -12,6 +12,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
+using System;
+using System.ComponentModel;
 
 
 namespace Assets.Scripts
@@ -89,7 +91,7 @@ namespace Assets.Scripts
         // Do we design scenarios to never use this, and plan for later?
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player")){
+            if (collision.CompareTag("Player") && !inRange){  // !inRange prevents overlapping dialogue
                 if (activateOnPlayerEnter)
                 {
                     PlayDialogueInteraction(collision);
@@ -104,7 +106,7 @@ namespace Assets.Scripts
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player"))
+            if (collision.CompareTag("Player"))  // TODO: Think of in range bug scenario
             {
                 inRange = false;
                 if (!activateOnPlayerEnter)
@@ -118,11 +120,10 @@ namespace Assets.Scripts
         {
             if(inRange && !inCombat && player.GetComponent<PlayerController>().grounded)
             {
-                // TODO: Fix connection. For now brute forced.
+                // TODO: Fix Pause menuconnection. For now brute forced.
                 pause.Invoke();
                 Time.timeScale = 0f;
 
-                // CURRENT: Just test reading json file of data
                 if (inConversation)  // Continue to play from current dialogue
                 {
                     // TODO: Get rid of placeholder
@@ -154,31 +155,68 @@ namespace Assets.Scripts
             // If we keep NPC relationships seperate from main quest, then NPC's relationship level will become their quest sequencing. This is ideal for simplicity
             // Protagonist can just talk to themselves about the previous run at the begining of the respawn point, solving the mystery.
 
-            // TODO:
-            int relationshipLevel = 0;   // Template variable
+            // TODO: Make variables dynamic
+            int relationshipLevel = 0;   
             string characterType = "Boss_";
             filePath = Application.dataPath + "/Scripts/Dialogue/DialogueObjects/" + characterType + CharacterName + "_" + relationshipLevel + ".json";
-            Debug.Log(Application.dataPath);
-            Debug.Log(filePath);
             jsonString = File.ReadAllText(filePath);
+            Debug.Log(filePath);
             //ActivateRequirements dialogueRequirements = JsonConvert.DeserializeObject<ActivateRequirements>(jsonString); 
             // Or we can use: JObject jsonObject = JObject.Parse(jsonString);
 
 
             // TODO: Find correct dialogue from activation requirements (connected to game data)
-            // Activation requirement should be a struct of game data
-            if (!isGameStateEligble())
+            if (isGameStateEligble())
             {
-                List<Conversation> conversations = JsonConvert.DeserializeObject<List<Conversation>>(jsonString);
-                int convoSize = conversations.Count;
-                int selectedConvo = Random.Range(0, convoSize);
-                Debug.Log("Conversation size: " + convoSize + ", Randomly Selected Conversation " + selectedConvo);
-                currentConvo = conversations[selectedConvo];
+                //Debug.Log(d.activateRequirement.test);
+                //DialogueObject dialogueObject = JsonConvert.DeserializeObject<DialogueObject>(jsonString);
+                //Debug.Log(dialogueObject.defaultPortrait);
+
+                //ActivateRequirements conversations = dialogueObject.activateRequirement;
+                //ActivateRequirements ei = JsonConvert.DeserializeObject<ActivateRequirements>(jsonString);
+                //Debug.Log("Test shoud be 1, in actuality " + ei.test);
+
+                JObject obj = JObject.Parse(jsonString);
+                Debug.Log("Priority " + (int)obj["priority"]);
+                JObject activatereq = (JObject)obj["ActivateRequirements"];
+
+                Debug.Log("Test " + (int)activatereq["Test"]);
+
+                JToken itemsToken = obj["ActivateRequirements"]["RequiredTextLines"];
+                Debug.Log("JToken");
+                Debug.Log(itemsToken.ToString());
+
+                JArray reqLines = JArray.Parse(itemsToken.ToString());
+                Debug.Log(reqLines.ToString());
+                int i = 0;
+                foreach (var element in reqLines)
+                {
+                    i++;
+                    Debug.Log(element);
+                }
+                Debug.Log(i);
+
+                JToken two = obj["InteractTextLineSets"];
+                Debug.Log(two.ToString());
+
+                JArray twoArr = JArray.Parse(two.ToString());
+                foreach (var element in twoArr)
+                {
+                    Debug.Log("Yay");
+                    Debug.Log(element);
+                }
+
+
+                //Conversation conv = conversations.Conversations[0];
+                //int convoSize = InterationSet.Conversations.Count;
+                //int selectedConvo = Random.Range(0, 0);
+                //Debug.Log("Conversation size: " + convoSize + ", Randomly Selected Conversation " + selectedConvo);
+                //currentConvo = InterationSet.Conversations[selectedConvo];
             }
 
             // Change Dialogue UI to JSON text
+            UpdateDialogueUI(currentConvo);
 
-            //TODO: UpdateDialogueUI(currentConvo);
             VisualDialogueUI.SetActive(true);
         }
 
@@ -196,7 +234,10 @@ namespace Assets.Scripts
         private void UpdateDialogueUI(Conversation convo)
         {
             // TODO: Use multi-threading / synchronization mechanisms to make sure dialogue data changes at the same time?
-            
+            //mainPortraitImage.Image;
+            charNameDisplay.text = convo.textLines[0].speaker;
+            charEpithetDisplay.text = "the protagonist";
+            displayedConvoText.text = convo.textLines[0].text;  
         }
 
         private void ExitVisualDialogue()
@@ -214,8 +255,9 @@ namespace Assets.Scripts
             VisualDialogueUI.SetActive(false);
         }
 
-        private bool isGameStateEligble()
+        private bool isGameStateEligble()  
         {
+            // Activation requirement should be a struct of game data
             return true;
         }
 
