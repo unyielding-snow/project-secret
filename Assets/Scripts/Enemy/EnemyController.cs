@@ -34,13 +34,25 @@ public class EnemyController : MonoBehaviour
     public EnemyAttackState attackState;
     protected bool chase = false;
 
+    [SerializeField] private int defaultState = 0;
+
     void Start()
     {
         startingPosition = transform.position;
         patrolState.Setup(body, animator);
         pauseState.Setup(body, animator);
-        state = pauseState;
+
+        if(defaultState == 0)
+        {
+            state = pauseState;
+        }
+        else if(defaultState == 1)
+        {
+            state = patrolState;
+        }
+
         state.Enter();
+
     }
 
     void Update()

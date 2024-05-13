@@ -6,12 +6,11 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
 
-    [SerializeField] public GameObject pausePanel;
+    [SerializeField] private GameObject pausePanel;
     Image brightnessOverlay;
     private bool paused;
 
     //[SerializeField] public Slider brightnessSlider;
-
 
     void Awake()
     {
