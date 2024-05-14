@@ -44,6 +44,8 @@ namespace Assets.Scripts
 
 
         [Header("States")]
+        // TODO: Sync inConversation & inCombat with player controller
+        // TODO: Maybe events?
         public bool inRange = false;
         public bool inConversation = false;
         public bool inCombat = false;
@@ -54,13 +56,16 @@ namespace Assets.Scripts
         private string filePath;
 
         // Conversation Data
-        private Conversation currentConvo;
-        private int currentConvoLine;
+        private Conversation curConvo;
+        private List<TextLine> textLines;
+        private TextLine curTextLine;
+        private int curLineNum;
+        private int maxLineNum;
 
 
         void Awake()
         {
-            currentConvoLine = 0;
+            curLineNum = 0;
             CharacterName = gameObject.GetComponent<CharacterInfo>().getName();
 
             VisualDialogueUI = GameObject.FindGameObjectWithTag("DialogueUI");
@@ -68,9 +73,8 @@ namespace Assets.Scripts
             DialogueIndicator = gameObject.transform.Find("DialogueIndicator").gameObject;
             DialogueIndicator.SetActive(false);
 
-            // Get mutable objects
-            //mainPortraitImage = GameObject.FindGameObjectWithTag("DialogueUIMainPortrait").GetComponent<Image>();
             // TODO: Spawn connections programatically to prevent null issues
+            // i.e mainPortraitImage = GameObject.FindGameObjectWithTag("DialogueUIMainPortrait").GetComponent<Image
             if (mainPortraitImage == null)
                 Debug.LogError("Image component not found!");
 
@@ -116,6 +120,7 @@ namespace Assets.Scripts
             }
         }
 
+        // TODO: Change name to more fitting onInteractDialogue something
         public void PlayDialogueInteraction(Collider2D player)
         {
             if(inRange && !inCombat && player.GetComponent<PlayerController>().grounded)
@@ -168,10 +173,7 @@ namespace Assets.Scripts
             // TODO: Find correct dialogue from activation requirements (connected to game data)
             if (isGameStateEligble())
             {
-                //Debug.Log(d.activateRequirement.test);
                 //DialogueObject dialogueObject = JsonConvert.DeserializeObject<DialogueObject>(jsonString);
-                //Debug.Log(dialogueObject.defaultPortrait);
-
                 //ActivateRequirements conversations = dialogueObject.activateRequirement;
                 //ActivateRequirements ei = JsonConvert.DeserializeObject<ActivateRequirements>(jsonString);
                 //Debug.Log("Test shoud be 1, in actuality " + ei.test);
@@ -228,53 +230,55 @@ namespace Assets.Scripts
                 Debug.Log("List of text lines");
                 JToken textLineListTok = convoList[0]["TextLines"];
                 JArray textLineList = JArray.Parse(textLineListTok.ToString());
-                List<TextLine> textLines = textLineList.ToObject<List<TextLine>>();
+                textLines = textLineList.ToObject<List<TextLine>>();
 
                 Debug.Log(textLineListTok.ToString());
                 foreach (var item in textLines)
                 {
                     Debug.Log(item.text);
                 }
-
-                //Conversation conv = conversations.Conversations[0];
-                //int convoSize = InterationSet.Conversations.Count;
-                //int selectedConvo = Random.Range(0, 0);
-                //Debug.Log("Conversation size: " + convoSize + ", Randomly Selected Conversation " + selectedConvo);
-                //currentConvo = InterationSet.Conversations[selectedConvo];
+                curTextLine = textLines[curLineNum];
+                
             }
 
             // Change Dialogue UI to JSON text
-            UpdateDialogueUI(currentConvo);
+            UpdateDialogueUI(curConvo);
 
             VisualDialogueUI.SetActive(true);
         }
 
         private void PlayNextDialogue(Conversation convo)
         {
-            // Get Next Line of Dialogue
-            currentConvoLine++;
-            if(currentConvoLine >= convo.textLines.Count)
+            curLineNum++;
+            if (curLineNum >= maxLineNum)
             {
                 ExitVisualDialogue();
             }
-            
+            else  // Play next line of dialogue stored in 
+            {
+
+            }
         }
 
         private void UpdateDialogueUI(Conversation convo)
         {
-            // TODO: Use multi-threading / synchronization mechanisms to make sure dialogue data changes at the same time?
-            //mainPortraitImage.Image;
-            charNameDisplay.text = convo.textLines[0].speaker;
-            charEpithetDisplay.text = "the protagonist";
-            displayedConvoText.text = convo.textLines[0].text;  
+            // MAYBE: Use synchronization mechanisms / multi-threading to make sure dialogue data changes at the same time?
+            charNameDisplay.text = curTextLine.speaker;
+
+            // TODO: Use speaker to find epithet
+            charEpithetDisplay.text = "temporary title";
+            displayedConvoText.text = curTextLine.text;  
         }
 
         private void ExitVisualDialogue()
         {
-            currentConvoLine = 0;
-            currentConvo = null;
+            curLineNum= 0;
+            maxLineNum = 0;
+            curConvo = null;
+            curTextLine = null;
 
             // TODO: publish conversation has been fullfilled and get rid of it in pool
+
 
             // TODO: Fix pause menu event connection
             resume.Invoke();
