@@ -7,12 +7,12 @@ using UnityEngine.Events;
 public class CharacterHealth : HealthSystem
 {
     public int maxHealth;
-    public int health;
     public bool iframesEnabled = false;
 
     protected override void Initialize()
     {
         base.Initialize();  // Don't hide the functions
+        base.currentHealth = maxHealth;
     }
 
     protected override bool ApplyDamage(int amount)
@@ -28,6 +28,7 @@ public class CharacterHealth : HealthSystem
         }
 
         currentHealth -= amount;
+        Debug.Log("Current Health:" + currentHealth);
 
         if(currentHealth <= 0 ) 
         {
@@ -42,8 +43,8 @@ public class CharacterHealth : HealthSystem
     {
         if (IsDead())
         {
-            Debug.Log("Error: Healed when dead");
-            Debug.Log("Use Health Change to Revive A Player");
+            Debug.LogError("Error: Healed when dead");
+            Debug.LogError("Use Health Change to Revive A Player");
         }
 
         currentHealth += amount; 
