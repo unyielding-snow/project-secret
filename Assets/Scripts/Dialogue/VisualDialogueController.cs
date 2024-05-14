@@ -196,16 +196,45 @@ namespace Assets.Scripts
                 }
                 Debug.Log(i);
 
-                JToken two = obj["InteractTextLineSets"];
-                Debug.Log(two.ToString());
+                JToken objFinal = obj["InteractTextLineSets"];
+                Debug.Log(objFinal.ToString());
+                JObject final = JObject.Parse(objFinal.ToString());
 
-                JArray twoArr = JArray.Parse(two.ToString());
-                foreach (var element in twoArr)
+                Debug.Log("Text Line Sets");
+
+                // Justin: I don't like the dictionary format. Let's try a list. 
+                //         List will disregards the name of the conversation, which is good [names are only for internal cataloging]
+
+                Dictionary<string, JObject> convoDict = new Dictionary<string, JObject>();
+                List<JObject> convoList = new List<JObject>();
+
+                foreach (var property in final.Properties())
                 {
-                    Debug.Log("Yay");
-                    Debug.Log(element);
+                    Debug.Log(property.Name);
+                    Debug.Log((JObject)property.Value);
+                    convoDict.Add(property.Name, (JObject)property.Value);
+                    convoList.Add((JObject)property.Value);
                 }
 
+                Debug.Log("Conversation List Size: " + convoList.Count);
+
+                Debug.Log("List of items in Conversation 0");
+                foreach (var item in convoList[0].Properties())
+                {
+                    Debug.Log(item.Name);
+                    Debug.Log(item.Value);
+                }
+
+                Debug.Log("List of text lines");
+                JToken textLineListTok = convoList[0]["TextLines"];
+                JArray textLineList = JArray.Parse(textLineListTok.ToString());
+                List<TextLine> textLines = textLineList.ToObject<List<TextLine>>();
+
+                Debug.Log(textLineListTok.ToString());
+                foreach (var item in textLines)
+                {
+                    Debug.Log(item.text);
+                }
 
                 //Conversation conv = conversations.Conversations[0];
                 //int convoSize = InterationSet.Conversations.Count;

@@ -16,7 +16,8 @@ namespace Assets.Scripts.Dialogue
 
         // Looks weird but neccsiary for json parsing
         public ActivateRequirements activateRequirement;
-        //public InteractTextLineSets conversations;
+
+        public InteractTextLineSets conversations;
     }
 
     public class ActivateRequirements
@@ -29,7 +30,8 @@ namespace Assets.Scripts.Dialogue
 
     public class InteractTextLineSets   
     {
-        public List<Conversation> Conversations;
+        // Just a holder for a list of conversations, for JSON serialization
+        public List<Conversation> IextLineSets;
     }
 
     public class Conversation
