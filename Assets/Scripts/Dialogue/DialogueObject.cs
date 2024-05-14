@@ -28,17 +28,17 @@ namespace Assets.Scripts.Dialogue
         public List<string> requiredEncounters;
     }
 
+    // Just a holder for a list of conversations, for JSON serialization
     public class InteractTextLineSets   
     {
-        // Just a holder for a list of conversations, for JSON serialization
         public List<Conversation> IextLineSets;
     }
 
     public class Conversation
     {
         public bool playOnce;
-        public bool requireRunNotCleared;  // In vilage safe zone or not?
-        public int charactersInBackground;
+        public bool requireRunNotCleared;   // In vilage safe zone or not?
+        public int charactersInBackground;  // Hades dim the third character in the bacgkround until called for duo boons 
         public string secondPortrait;
 
         public List<string> requiredFalseLines;
@@ -47,7 +47,6 @@ namespace Assets.Scripts.Dialogue
 
     public class TextLine
     {
-        // Hades dim the third character in the bacgkround until called
         public string audioCue;
         public string expression;
         public string portrait;
