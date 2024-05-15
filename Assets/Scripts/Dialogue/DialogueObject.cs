@@ -9,6 +9,7 @@ namespace Assets.Scripts.Dialogue
 {
     public class DialogueObject   
     {
+        public string character;
         public string defaultPortrait;
         public string subtitleColor;
 

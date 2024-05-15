@@ -57,7 +57,7 @@ namespace Assets.Scripts
 
         // Conversation Data
         private Conversation curConvo;
-        private List<TextLine> textLines;
+        private List<TextLine> textLinesSet;
         private TextLine curTextLine;
         private int curLineNum;
         private int maxLineNum;
@@ -131,9 +131,7 @@ namespace Assets.Scripts
 
                 if (inConversation)  // Continue to play from current dialogue
                 {
-                    // TODO: Get rid of placeholder
-                    //PlayNextDialogue(currentConvo);
-                    ExitVisualDialogue();
+                    PlayNextDialogue();
                 }
                 else
                 {
@@ -166,9 +164,6 @@ namespace Assets.Scripts
             filePath = Application.dataPath + "/Scripts/Dialogue/DialogueObjects/" + characterType + CharacterName + "_" + relationshipLevel + ".json";
             jsonString = File.ReadAllText(filePath);
             Debug.Log(filePath);
-            //ActivateRequirements dialogueRequirements = JsonConvert.DeserializeObject<ActivateRequirements>(jsonString); 
-            // Or we can use: JObject jsonObject = JObject.Parse(jsonString);
-
 
             // TODO: Find correct dialogue from activation requirements (connected to game data)
             if (isGameStateEligble())
@@ -178,6 +173,8 @@ namespace Assets.Scripts
                 //ActivateRequirements ei = JsonConvert.DeserializeObject<ActivateRequirements>(jsonString);
                 //Debug.Log("Test shoud be 1, in actuality " + ei.test);
 
+
+                // TODO: dynamically build up a dialogue object variable, so we don't waste memory
                 JObject obj = JObject.Parse(jsonString);
                 Debug.Log("Priority " + (int)obj["priority"]);
                 JObject activatereq = (JObject)obj["ActivateRequirements"];
@@ -201,6 +198,7 @@ namespace Assets.Scripts
                 JToken objFinal = obj["InteractTextLineSets"];
                 Debug.Log(objFinal.ToString());
                 JObject final = JObject.Parse(objFinal.ToString());
+                Debug.Log("final objc" + final.ToString());
 
                 Debug.Log("Text Line Sets");
 
@@ -230,44 +228,58 @@ namespace Assets.Scripts
                 Debug.Log("List of text lines");
                 JToken textLineListTok = convoList[0]["TextLines"];
                 JArray textLineList = JArray.Parse(textLineListTok.ToString());
-                textLines = textLineList.ToObject<List<TextLine>>();
+                textLinesSet = textLineList.ToObject<List<TextLine>>();
 
                 Debug.Log(textLineListTok.ToString());
-                foreach (var item in textLines)
+                foreach (var item in textLinesSet)
                 {
                     Debug.Log(item.text);
                 }
-                curTextLine = textLines[curLineNum];
-                
+
+                // Set variables
+                curTextLine = textLinesSet[curLineNum];
+                maxLineNum = textLinesSet.Count;
             }
 
             // Change Dialogue UI to JSON text
-            UpdateDialogueUI(curConvo);
+            UpdateDialogueUI();
 
             VisualDialogueUI.SetActive(true);
         }
 
-        private void PlayNextDialogue(Conversation convo)
+        private void PlayNextDialogue()
         {
-            curLineNum++;
-            if (curLineNum >= maxLineNum)
+            Debug.Log("Playing next dialogue");
+            if (curLineNum < maxLineNum)  // Play next line of dialogue
+            {
+                Debug.Log("cur = " + curLineNum + "max = " + maxLineNum);
+                curTextLine = textLinesSet[curLineNum];
+                UpdateDialogueUI();
+            }
+            else   
             {
                 ExitVisualDialogue();
             }
-            else  // Play next line of dialogue stored in 
-            {
-
-            }
         }
 
-        private void UpdateDialogueUI(Conversation convo)
+        private void UpdateDialogueUI()
         {
             // MAYBE: Use synchronization mechanisms / multi-threading to make sure dialogue data changes at the same time?
+            Debug.Log(curTextLine.ToString());
             charNameDisplay.text = curTextLine.speaker;
 
-            // TODO: Use speaker to find epithet
+            if(curTextLine.speaker == null)
+            {
+                charNameDisplay.text = "Set Default";
+            }
+
             charEpithetDisplay.text = "temporary title";
-            displayedConvoText.text = curTextLine.text;  
+            displayedConvoText.text = curTextLine.text;
+
+            curLineNum++;
+
+            // TODO: Use speaker to find epithet
+
         }
 
         private void ExitVisualDialogue()
@@ -288,7 +300,7 @@ namespace Assets.Scripts
             VisualDialogueUI.SetActive(false);
         }
 
-        private bool isGameStateEligble()  
+        private bool isGameStateEligble()  // PASS IN GAME STATE
         {
             // Activation requirement should be a struct of game data
             return true;
