@@ -473,7 +473,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -571,6 +571,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8674d62e69ee6a64c8a16ea7201a85d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Interact:
+    m_PersistentCalls:
+      m_Calls: []
   body: {fileID: 588883850}
   groundCheck: {fileID: 100993832}
   groundMask:
@@ -663,7 +666,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1343,6 +1346,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec579ee6f36e93e47a466e32b56e0a63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseEvent:
+    m_PersistentCalls:
+      m_Calls: []
   pausePanel: {fileID: 1452945916}
 --- !u!1 &1929314325
 GameObject:
