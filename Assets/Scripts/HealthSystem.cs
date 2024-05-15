@@ -8,7 +8,6 @@ using UnityEngine.Events;
 
 public abstract class HealthSystem : MonoBehaviour
 {
-    // TODO: Implement UnityEvents system
     [System.Serializable]
     public struct HealthEvents
     {

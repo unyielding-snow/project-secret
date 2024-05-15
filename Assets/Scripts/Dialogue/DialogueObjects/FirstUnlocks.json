@@ -1,0 +1,7 @@
+// Have a bool in run data that tells us if there was a new unlock that we should check for first unlocks
+// I.E First time defeating the hydra, first time defeating the demon
+// I.E if the player defeated the hydra in the last run, if it the player has defeated the demon
+
+// JSON lists are ordered, so we can use this to our advantage, putting the most important / later unlocks first
+// ALso could try to account for the player defeating multiple bosses in one run, and congratulating them!  
+

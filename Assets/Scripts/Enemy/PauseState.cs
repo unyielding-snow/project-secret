@@ -15,11 +15,10 @@ public class PauseState : State
     {
         elaspedTime += Time.unscaledDeltaTime;
 
-        if (time >= 3)  // Elasped time == 2 seconds
-        {
-            Debug.Log("True!");
-            isComplete = true;
-        }
+        //if (time >= 3)  // Elasped time == 2 seconds
+        //{
+        //    isComplete = true;
+        //}
     }
 
     public override void Exit() 

@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+    public UnityEvent Interact;
+
     State state;
     WalkState walkState;
     AirState airState;
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
         //walkState.Setup(body, animator, this);
         //airState.Setup(body, animator, this);
         state = idleState;
+        gameObject.tag = "Player";
     }
 
     void Update() 
@@ -76,6 +79,12 @@ public class PlayerController : MonoBehaviour
     {
         xInput = Input.GetAxis("Horizontal");
         yInput = Input.GetAxis("Vertical");
+
+        if (Input.GetButtonDown("Interact"))  // e button
+        {
+            Interact.Invoke();
+        }
+
     }
 
     void HandleXMovement()

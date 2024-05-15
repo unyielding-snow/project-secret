@@ -1,0 +1,47 @@
+{
+	"character": "Dugu",
+	"defaultPortrait": "Portrait_Default_Qiubai_01",
+	"subtitleColor": "White",
+	"priority": 1,
+	
+	"ActivateRequirements":
+	{
+		"Test": 1,
+		"RequiredTextLines": [ "TestRequiredLine", "Test", "Two" ],
+		"RequiredFalseTextLinesThisRun": [ "TestNotRequiredLine" ],
+		"RequiredEncounters": [ "TestRequiredEncounters" ]
+	},
+	
+	InteractTextLineSets: {
+		DuguCombatFirstEncounter: {
+			PlayOnce: true,
+			RequireRunNotCleared: true,
+			CharactersInBackground: 0,
+			RequiredFalseTextLines: ["DuguFirstEncoutnerAlt","Ending01"],
+			TextLines: [	
+				{ AudioCue: "/VO/Dugu_0001",
+					Text: "You are not the first to challenge me, and you will not be the last."
+				},
+				{ AudioCue: "/VO/ProtagonistCombat_123", Portrait: "Protag_Stoic_01", Speaker: "CharProtg",
+					Text: "This is a testing setnence for long sentence length and is not actually being spoken.
+					By the prograonist and please ignore this message ok hello thanks debugger"
+				},
+				{ AudioCue: "/VO/Dugu_0002", Portrait: "Dugu_Angry_01", Speaker: "CharDugu",
+					Text: "Pick up your sword. You will not have another chance. 
+					Your sword will rust in the eons of sand like the thousands of \"heroes\" before you"
+				}
+			]
+		},
+		DuguCombatFirstEncounterAlt: {
+			PlayOnce: true,
+			RequireRunNotCleared: true,
+			CharactersInBackground: 0,
+			RequiredFalseTextLines: ["DuguFirstEncoutner", "Ending01"],
+			TextLines: [
+				{ AudioCue: "/VO/Dugu_0001",
+					Text: "This is a simple demonstration, really."
+				}
+			]
+		}
+	}	
+}
