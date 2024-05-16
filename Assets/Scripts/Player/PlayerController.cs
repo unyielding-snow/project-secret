@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public float timeBetweenAttack = 1f;
     public float timeSinceAttack;
 
+    private int inputDirection;   // 0 = left, 1 = right, 2 = up  
     public bool grounded { get; protected set; }
     public float xInput { get; protected set; }
     public float yInput { get; protected set; }
@@ -122,7 +123,7 @@ public class PlayerController : MonoBehaviour
             //float newSpeed = Mathf.Clamp(body.velocity.x + increment, -maxSpeed, maxSpeed);  // Limiter clamp
             body.velocity = new Vector2(xInput * maxSpeed, body.velocity.y);
 
-            //FaceDirection();
+            FaceDirectionOfInput();
         }
     }
 
@@ -134,10 +135,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void FaceDirection()
+    void FaceDirectionOfInput()
     {
         float direction = Mathf.Sign(xInput);
-        transform.localScale = new Vector3(direction, 1, 1);
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * direction; 
+        transform.localScale = scale;
     }
 
     void CheckGround()
