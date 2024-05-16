@@ -32,6 +32,7 @@ public class EnemyController : MonoBehaviour
     public PauseState pauseState;
     public ChaseState chaseState;
     public EnemyAttackState attackState;
+    public HitState hitState;
     protected bool chase = false;
 
     [SerializeField] private int defaultState = 0;
@@ -41,6 +42,7 @@ public class EnemyController : MonoBehaviour
         startingPosition = transform.position;
         patrolState.Setup(body, animator);
         pauseState.Setup(body, animator);
+        hitState.SetupEnemy(body, animator, this);
 
         if(defaultState == 0)
         {
@@ -77,7 +79,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            state = patrolState;
+            state = pauseState;
         }
         state.Enter();
     }
@@ -109,6 +111,14 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(attackRange.bounds.center + -transform.right * range * transform.localScale.x, 
                             attackRange.bounds.size);
+    }
+
+    public void OnHit()
+    {
+        Debug.Log("Enemy Hit");
+        state.Exit();
+        state = hitState;
+        state.Enter();
     }
 
 }

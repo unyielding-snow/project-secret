@@ -10,7 +10,7 @@ public class PatrolState : State
     [SerializeField] private Transform rightBorder;
 
     [Header("Enemy")]
-    [SerializeField] private Transform enemy;
+    [SerializeField] private Transform enemyTransform;
     private Vector3 initScale;
     public bool movingLeft;
     public float patrolSpeed = 1f;
@@ -19,8 +19,8 @@ public class PatrolState : State
 
     public override void Enter()
     {
-        Debug.Log("Patrol State");
-        initScale = enemy.localScale;
+        Debug.Log("Enter Patrol State");
+        initScale = enemyTransform.localScale;
         animator.SetBool("Walk", true);
     }
 
@@ -29,7 +29,7 @@ public class PatrolState : State
         if(movingLeft)
         {
             //Debug.Log("Patrol State : Do Left");
-            if (enemy.position.x >= leftBorder.position.x)
+            if (enemyTransform.position.x >= leftBorder.position.x)
                 MoveDirection(-1);
             else
             {
@@ -39,7 +39,7 @@ public class PatrolState : State
         }
         else
         {
-            if (enemy.position.x <= rightBorder.position.x)
+            if (enemyTransform.position.x <= rightBorder.position.x)
                 MoveDirection(1);
             else
             {
@@ -61,11 +61,11 @@ public class PatrolState : State
 
         // Face Player Direction
         // TODO: Watch how hollow knight does this animation
-        enemy.localScale = new Vector3(Mathf.Abs(initScale.x) * _direction, initScale.y, initScale.z);
+        enemyTransform.localScale = new Vector3(Mathf.Abs(initScale.x) * _direction, initScale.y, initScale.z);
 
         // Patrol Left and Right, will be different for other enemies
         // Move in direction
-        enemy.position = new Vector3(enemy.position.x + Time.deltaTime * patrolSpeed * _direction, enemy.position.y, enemy.position.x);
+        enemyTransform.position = new Vector3(enemyTransform.position.x + Time.deltaTime * patrolSpeed * _direction, enemyTransform.position.y, enemyTransform.position.x);
     }
 
 }

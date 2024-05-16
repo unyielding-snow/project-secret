@@ -9,26 +9,34 @@ public class PlayerController : MonoBehaviour
     public UnityEvent Interact;
 
     State state;
-    WalkState walkState;
-    AirState airState;
-    IdleState idleState;
+    public WalkState walkState;
+    public AirState airState;
+    public IdleState idleState;
+    public AttackState attackState;
 
     public Rigidbody2D body;
     public BoxCollider2D groundCheck;
     public LayerMask groundMask;
     public Animator animator;
 
+    [Header("Player Stats")]
     public float acceleration;
     public float maxSpeed;
     public float groundSpeed;
     public float jumpSpeed;
     public float groundDecay;
+
+    private float timeLastAttack = 0;
+    public float timeBetweenAttack = 1f;
+    public float timeSinceAttack;
+
     public bool grounded { get; protected set; }
     public float xInput { get; protected set; }
     public float yInput { get; protected set; }
 
     private void Start()
     {
+        attackState.Setup(body, animator);
         //idleState.Setup(body, animator, this);
         //walkState.Setup(body, animator, this);
         //airState.Setup(body, animator, this);
@@ -46,7 +54,7 @@ public class PlayerController : MonoBehaviour
             //SelectState();
         //}
 
-        //state.Do();
+        state.Do();
     }
 
     void FixedUpdate()  // Handle Physics
@@ -80,9 +88,27 @@ public class PlayerController : MonoBehaviour
         xInput = Input.GetAxis("Horizontal");
         yInput = Input.GetAxis("Vertical");
 
-        if (Input.GetButtonDown("Interact"))  // e button
+        // Interact [e] button
+        if (Input.GetButtonDown("Interact"))  
         {
             Interact.Invoke();
+        }
+
+        // Attack [Mouse1] or [J]
+        if (Input.GetButtonDown("Attack"))
+        {
+            timeSinceAttack = Time.time - timeLastAttack;
+            if (timeSinceAttack >= timeBetweenAttack)
+            {
+                Debug.Log("Attack Permitted " + timeSinceAttack + " "+ timeBetweenAttack);
+                timeLastAttack = Time.time;
+                state = attackState;
+                state.Enter();
+            }
+            else
+            {
+                Debug.Log("Attack Not Permitted");
+            }
         }
 
     }
