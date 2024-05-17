@@ -1,39 +1,48 @@
 ﻿using Mono.Cecil;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts
+
+//[CreateAssetMenu(fileName = "GlobalData", menuName = "GlobalDataPersistance")]
+public static class GlobalData
 {
-    [CreateAssetMenu(fileName = "GlobalData", menuName = "GlobalDataPersistance")]
-    public class GlobalData : ScriptableObject
+    // ---- GLOBAL DATA ----
+    private static int defaultHeath = 100;
+    public static int maxPlayerHealth = 100;
+
+    public static int playerDeaths = 0;   // Death = Runs
+    public static int totalEnemiesSlain = 0;
+
+    private static int numNPC = 4;       // Number of NPCs to befriend 
+    private static int numBosses = 1;   // Number of Bosses (potentially befriend?)
+
+    // Player NPC Relationships
+    public static Dictionary<string, relationshipData> playerRelationships;
+
+    // Potential Feature:
+    // NPC to NPC Relationships: For dual dialogue interactions, we can use a 2D array between NPCs
+    // public static int[,] NPCrelationships = new int[4, 4];
+
+
+    // ---- RUN SPECIFIC DATA ----
+    public static int runEnemiesSlain = 0;
+
+
+    public static void CreateNewGlobaData()
     {
-        // ---- GLOBAL DATA ----
-        public int maxPlayerHealth = 100;
+        maxPlayerHealth = defaultHeath;
+        playerDeaths = 0;
+        totalEnemiesSlain = 0;
 
-        public int playerDeaths = 0;   // Death = Runs
-        public int playerEnemiesSlain = 0;
+        playerRelationships = new Dictionary<string, relationshipData>();
+        
+    }
 
-        private int numNPC = 4;       // Number of NPCs to befriend 
-        private int numBosses = 1;   // Number of Bosses (potentially befriend?)
-
-        // Player NPC Relationships
-        Dictionary<string, relationshipData> playerRelationships = new Dictionary<string, relationshipData>()
-        {
-            { "Friend", new relationshipData(false, 0, 0) }
-        };
-
-        // NPC to NPC Relationships
-        // For dual dialogue interactions, we can use a 2D array between NPCs
-        int[,] NPCrelationships = new int[4, 4];
-
-        // Inventory System
-
-
-        // Dialogue System
-
-
-        // ---- RUN SPECIFIC DATA ----
-
+    public static void NewRun()   // Reset Run Specific Data
+    {
+        runEnemiesSlain = 0;
     }
 
     public struct relationshipData
@@ -49,4 +58,5 @@ namespace Assets.Scripts
             tier = _tier;
         }
     }
+
 }

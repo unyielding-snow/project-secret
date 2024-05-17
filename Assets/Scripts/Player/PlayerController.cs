@@ -35,6 +35,19 @@ public class PlayerController : MonoBehaviour
     public float xInput { get; protected set; }
     public float yInput { get; protected set; }
 
+    public static PlayerController Instance;
+    private void Awake()
+    {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     private void Start()
     {
         attackState.Setup(body, animator);
