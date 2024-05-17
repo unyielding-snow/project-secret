@@ -5,25 +5,25 @@ using UnityEngine;
 
 // Inventory Manager System
 [Serializable]
-public class InventorySystem
+public static class InventorySystem
 {
-    private Dictionary<ItemData, InventoryItem> itemDictionary;
-    public List<InventoryItem> inventory { get; private set; }
+    public static Dictionary<ItemData, InventoryItem> itemDictionary;
+    public static List<InventoryItem> inventory { get; private set; }
 
-    public InventorySystem()
+    public static void CreateNewInventorySystem()
     {
         inventory = new List<InventoryItem>();
         itemDictionary = new Dictionary<ItemData, InventoryItem>();
     }
 
-    public void Add(ItemData reference)
+    public static void Add(ItemData reference)
     {
         if (reference == null)
         {
             Debug.LogError("Attempt to add a null reference");
             return;
         }
-        if (itemDicionary.TryGetValue(reference, out InventoryItem value))
+        if (itemDictionary.TryGetValue(reference, out InventoryItem value))
         {
             value.AddToStack();
         }
@@ -35,14 +35,14 @@ public class InventorySystem
         }
     }
 
-    public void Remove(ItemData reference)
+    public static void Remove(ItemData reference)
     {
         if (reference == null)
         {
             Debug.LogError("Attempt to remove a null reference");
             return;
         }
-        if (itemDicionary.TryGetValue(reference, out InventoryItem value))
+        if (itemDictionary.TryGetValue(reference, out InventoryItem value))
         {
             value.RemoveFromStack();
 
@@ -50,26 +50,26 @@ public class InventorySystem
             {
                 inventory.Remove(value);
                 itemDictionary.Remove(reference);
-            }
+            } 
         }
     }
 
-    public InventoryItem Get(ItemData reference)
+    public static InventoryItem Get(ItemData reference)
     {
         if (reference == null)
         {
             Debug.LogError("Attempt to get a null reference");
-            return;
         }
-        if (itemDicionary.TryGetValue(reference, out InventoryItem value))
+        if (itemDictionary.TryGetValue(reference, out InventoryItem value))
         {
-            return value;
+            return value; 
         }
         return null;
     }
 
-    public bool DoesItemExist(ItemData reference) 
+    public static bool DoesItemExist(ItemData reference) 
     {
         return (Get(reference) != null);
     }
+
 }
