@@ -6,7 +6,6 @@ using UnityEngine;
 public class SaveData
 {
     // Add other serializable objects/data to store
-    InventorySystem inventorySystem;
     // Global Data
     // Run Data
     // Quest Data
