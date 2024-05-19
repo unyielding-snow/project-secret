@@ -9,10 +9,16 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private Vector3 startingPosition;
+    private HealthSystem healthSystem;
 
     [Header("Object Body")]
     public Rigidbody2D body;
     public Animator animator;
+
+    [Header("Enemy Definition")]
+    [SerializeField] private string enemyType = "mob";
+    [SerializeField] private bool superArmor = false;
+    [SerializeField] private bool isDead = false;
 
     [Header("Stats")]
     [SerializeField] private float speed = 1f;
@@ -32,13 +38,15 @@ public class EnemyController : MonoBehaviour
     public PauseState pauseState;
     public ChaseState chaseState;
     public EnemyAttackState attackState;
+    public DeathState deathState;
     public HitState hitState;
     protected bool chase = false;
 
     [SerializeField] private int defaultState = 0;
 
-    void Start()
+    void Awake()
     {
+        healthSystem = GetComponent<CharacterHealth>();
         startingPosition = transform.position;
         patrolState.Setup(body, animator);
         pauseState.Setup(body, animator);
@@ -54,7 +62,6 @@ public class EnemyController : MonoBehaviour
         }
 
         state.Enter();
-
     }
 
     void Update()
@@ -116,9 +123,27 @@ public class EnemyController : MonoBehaviour
     public void OnHit()
     {
         Debug.Log("Enemy Hit");
-        state.Exit();
-        state = hitState;
+
+        if (superArmor == false)   // Stun on Hit
+        {
+            state.Exit();
+            state = hitState;
+            state.Enter();
+        }
+        else   // Play coroutine of flashing white
+        {
+             
+        }
+    }
+
+    public void InvokeDeath()
+    {
+        state = deathState;
         state.Enter();
     }
 
+    public string GetEnemyType()
+    {
+        return enemyType;
+    }
 }

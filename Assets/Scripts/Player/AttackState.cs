@@ -20,7 +20,7 @@ public class AttackState : State
         attackHitbox = GetComponentInChildren<PolygonCollider2D>();
 
         // Collect all enemies hit
-        Collider2D[] hitEnemies ; 
+        Collider2D[] hitEnemies; 
 
     }
 

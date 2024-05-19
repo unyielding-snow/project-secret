@@ -2,12 +2,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-// General Health System
 
-public class CharacterHealth : HealthSystem
+public class EnemyHealth : HealthSystem
 {
     public int maxHealth;
-    public bool iframesEnabled = false;
 
     protected override void Initialize()
     {
@@ -17,20 +15,10 @@ public class CharacterHealth : HealthSystem
 
     protected override bool ApplyDamage(int amount)
     {
-        if (iframesEnabled)
-        {
-            // not sure how we want to do iframe time scheduling
-            float iframeEnd = 0f;
-            if(Time.time < iframeEnd)
-            {
-                return false;
-            }
-        }
-
         currentHealth -= amount;
         Debug.Log("Current Health:" + currentHealth);
 
-        if(currentHealth <= 0 ) 
+        if (currentHealth <= 0)
         {
             currentHealth = 0;
             Die();
@@ -47,9 +35,9 @@ public class CharacterHealth : HealthSystem
             Debug.LogError("Use Health Change to Revive A Player");
         }
 
-        currentHealth += amount; 
+        currentHealth += amount;
 
-        if(currentHealth > maxHealth)
+        if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
@@ -57,4 +45,14 @@ public class CharacterHealth : HealthSystem
         return true;
     }
 
+    protected override void Die()
+    {
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            SetDead(true);
+        }
+        EnemyController enemy = this.gameObject.GetComponent<EnemyController>();
+        enemy.InvokeDeath();
+    }
 }

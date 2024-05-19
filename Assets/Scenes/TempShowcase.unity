@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 52269622}
   - component: {fileID: 52269624}
   - component: {fileID: 52269623}
+  - component: {fileID: 52269625}
   m_Layer: 8
   m_Name: SwordEnemy
   m_TagString: Untagged
@@ -378,6 +379,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 52269620}
   animator: {fileID: 52269622}
+  enemyType: mob
+  superArmor: 0
+  isDead: 0
   speed: 2
   attackDamage: 10
   attackCooldown: 0
@@ -391,6 +395,7 @@ MonoBehaviour:
   pauseState: {fileID: 275366414}
   chaseState: {fileID: 0}
   attackState: {fileID: 0}
+  deathState: {fileID: 0}
   hitState: {fileID: 1214651932}
   defaultState: 0
 --- !u!95 &52269622
@@ -456,6 +461,33 @@ MonoBehaviour:
   inRange: 0
   inConversation: 0
   inCombat: 0
+--- !u!114 &52269625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52269616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 884731f5f1e40f84eb1cd9c78432122a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  events:
+    OnHeal:
+      m_PersistentCalls:
+        m_Calls: []
+    OnDamage:
+      m_PersistentCalls:
+        m_Calls: []
+    OnDeath:
+      m_PersistentCalls:
+        m_Calls: []
+    OnHealthChange:
+      m_PersistentCalls:
+        m_Calls: []
+  isInvincible: 0
+  maxHealth: 100
 --- !u!1 &100993831
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,7 +1090,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.049569894, y: -0.010748386, z: -10}
+  m_LocalPosition: {x: 0.049569894, y: -0.010461807, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1433,7 +1465,6 @@ MonoBehaviour:
         m_Calls: []
   isInvincible: 0
   maxHealth: 100
-  health: 100
   iframesEnabled: 0
 --- !u!95 &588883854
 Animator:
@@ -3415,21 +3446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad458d7a276b904f8582b99a16db994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 52269621}
-        m_TargetAssemblyTypeName: EnemyController, Assembly-CSharp
-        m_MethodName: OnHit
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1904959162
 GameObject:
   m_ObjectHideFlags: 0

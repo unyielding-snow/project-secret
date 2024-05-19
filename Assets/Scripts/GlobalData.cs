@@ -14,6 +14,7 @@ public static class GlobalData
 
     public static int playerDeaths = 0;   // Death = Runs
     public static int totalEnemiesSlain = 0;
+    public static int totalBossesSlain = 0;
 
     private static int numNPC = 4;       // Number of NPCs to befriend 
     private static int numBosses = 1;   // Number of Bosses (potentially befriend?)
@@ -28,6 +29,7 @@ public static class GlobalData
 
     // ---- RUN SPECIFIC DATA ----
     public static int runEnemiesSlain = 0;
+    public static int runBossesSlain = 0;
 
 
     public static void CreateNewGlobaData()
@@ -37,12 +39,12 @@ public static class GlobalData
         totalEnemiesSlain = 0;
 
         playerRelationships = new Dictionary<string, relationshipData>();
-        
     }
 
     public static void NewRun()   // Reset Run Specific Data
     {
         runEnemiesSlain = 0;
+        runBossesSlain = 0;
     }
 
     public struct relationshipData
@@ -56,6 +58,20 @@ public static class GlobalData
             isUnlocked = _isUnlocked;
             value = _value;
             tier = _tier;
+        }
+    }
+
+    public static void AddDeath(string enemyType)
+    {
+        if(enemyType == "mob")
+        {
+            runEnemiesSlain++;
+            totalBossesSlain++;
+        }
+        else if (enemyType == "boss")
+        {
+            runBossesSlain++;
+            totalBossesSlain++;
         }
     }
 

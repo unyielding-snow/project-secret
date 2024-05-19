@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // General Health System
+// TODO: Get rid of unity events
 
 public abstract class HealthSystem : MonoBehaviour
 {
@@ -69,20 +70,17 @@ public abstract class HealthSystem : MonoBehaviour
 
     protected abstract bool ApplyDamage(int amount);
 
-    protected void Die()
-    {
-        if (isDead)
-        {
-            return;
-        }
-
-        isDead = true;
-        events.OnDeath.Invoke();
-    }
+    protected abstract void Die();
+ 
 
     public bool IsDead()
     {
         return isDead;
     }
-   
+
+    public void SetDead(bool target)
+    {
+        isDead = target;
+    }
+
 }
